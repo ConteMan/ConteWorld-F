@@ -1,0 +1,46 @@
+@import "~@/style/variables";
+
+.layout-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  .sidebar-container {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: flex-end;
+    width: 200px;
+    height: 100%;
+    animation-duration: 0.8s;
+    transition: all 0.8s;
+    @{deep} .nav-container {
+      width: 200px;
+      position: fixed;
+    }
+    .space-container {
+      width: 2px;
+      position: fixed;
+    }
+  }
+  .content-container {
+    // flex-grow: 1;
+    flex-shrink: 1;
+  }
+}
+
+.dark-theme {
+  .base-container {
+    .side-container {
+      border-right: 1px solid @dark-theme-border;
+    }
+    .touch-div {
+      background-color: @dark-theme-border;
+      span {
+        background-color: @grey-20;
+      }
+    }
+    .content-header{
+      border-bottom: 1px solid @dark-theme-border;
+    }
+  }
+}
