@@ -1,44 +1,20 @@
 <template>
   <div class="header-container">
-    <div
-      class="header"
-      :style="{ 'height': headerHeight + 'px' }"
-      :class="{ 'hide-icon': !showHeader }"
-    >
-        <div class="trigger" @click="menuAction()">
-          <a-icon type="menu" class="trigger-icon"/>
+    <div class="header" :style="{ height: headerHeight + 'px' }" :class="{ 'hide-icon': !showHeader }">
+      <div class="trigger" @click="menuAction('default')">
+        <a-icon type="menu" class="trigger-icon" />
+      </div>
+      <div v-if="isArticleDetail" class="trigger" @click="$router.push({ path: '/article' })">
+        <a-icon type="left" class="trigger-icon" />
+      </div>
+      <div v-if="showListIcon" class="trigger" @click="showListAction(!showList)">
+        <c-icon type="icon-mulu" class="trigger-icon" />
+      </div>
+      <div class="right">
+        <div v-if="isArticle" class="trigger" title="RSS Feed of Article" @click="turnUrl('/feed/article.rss')">
+          <c-icon type="icon-rss" class="trigger-icon" />
         </div>
-        <div
-          v-if="isArticleDetail"
-          class="trigger"
-          @click="$router.push({ path: '/article'})"
-        >
-          <a-icon type="left" class="trigger-icon"/>
-        </div>
-        <div
-          v-if="showListIcon"
-          class="trigger"
-          @click="showListAction(!showList)"
-        >
-          <c-icon type="icon-mulu" class="trigger-icon"/>
-        </div>
-        <div class="right">
-          <div
-            v-if="isArticle"
-            class="trigger"
-            title="RSS Feed of Article"
-            @click="turnUrl('https://isconte.com/feed/article.rss')"
-          >
-            <c-icon type="icon-rss" class="trigger-icon"/>
-          </div>
-          <!-- <div
-            class="trigger"
-            title="Pin Header"
-            @click="headerPinAction()"
-          >
-            <a-icon type="pushpin" :rotate="pinIconRotate" class="trigger-icon"/>
-          </div> -->
-        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -61,9 +37,6 @@ export default {
       leaveAnimate: 'fadeOut',
     };
   },
-  created() {
-    this.deal();
-  },
   computed: {
     showListIcon() {
       return this.isArticleDetail && this.clientWidth > this.$config.articleShowListWidth;
@@ -77,6 +50,9 @@ export default {
   },
   watch: {
     '$route': 'deal'
+  },
+  created() {
+    this.deal();
   },
   methods: {
     ...mapMutations('app', {
@@ -97,17 +73,16 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "~@/style/variables.less";
+@import '~@/style/variables.less';
 
 .header-container {
   position: fixed;
-  bottom: 0;
+  bottom: -1px;
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100%;
   max-width: 1000px;
-  border-radius: 4px;
   border-bottom: 1px solid @border-color;
   z-index: 2;
   background: @bg;
@@ -128,7 +103,10 @@ export default {
       .trigger-icon {
         font-size: 18px;
       }
-      &:hover, &:focus, &:active, &:target {
+      &:hover,
+      &:focus,
+      &:active,
+      &:target {
         opacity: 1;
       }
     }
